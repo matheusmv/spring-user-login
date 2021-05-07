@@ -12,7 +12,7 @@
 	<artifactId>app</artifactId>
 	<version>0.0.1</version>
 	<name>app</name>
-	<description>User Login and Registration and Email Verification</description>
+	<description>User Login and Registration + Email Verification</description>
 
 	<properties>
 		<java.version>15</java.version>

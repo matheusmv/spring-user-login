@@ -22,7 +22,8 @@ public class UserRegistrationController {
     }
 
     @GetMapping("/confirm")
-    public String confirm(@RequestParam("token") String token) {
-        return registrationService.confirmToken(token);
+    public ResponseEntity<String> confirm(@RequestParam("token") String token) {
+        var msg = registrationService.confirmToken(token);
+        return ResponseEntity.ok().body(msg);
     }
 }

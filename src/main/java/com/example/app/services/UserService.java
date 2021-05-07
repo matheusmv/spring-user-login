@@ -35,6 +35,7 @@ public class UserService implements UserDetailsService {
         boolean userExists = userRepository.findByEmail(user.getEmail()).isPresent();
 
         if (userExists) {
+            // TODO: if email not confirmed send confirmation email again.
             throw new UserExistsException(USER_ALREADY_EXISTS_MSG);
         }
 
@@ -56,14 +57,12 @@ public class UserService implements UserDetailsService {
 
         confirmationTokenService.saveConfirmationToken(confirmationToken);
 
-        // TODO: send email
-
         return token;
     }
 
     public void enableUser(String email) {
         var user = userRepository.findByEmail(email);
-        user.ifPresent(u -> u.setEnabled(true));
+        user.ifPresent(usr -> usr.setEnabled(true));
         user.ifPresent(userRepository::save);
     }
 }
