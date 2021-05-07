@@ -8,3 +8,7 @@ spring:
     mongodb:
       auto-index-creation: true
       uri: mongodb+srv://
+
+logging:
+  level:
+    org.springframework.data.mongodb.core.MongoTemplate: DEBUG
