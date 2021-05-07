@@ -1,5 +1,6 @@
 package com.example.app.controllers.exceptions;
 
+import com.example.app.exceptions.InvalidConfirmationTokenException;
 import com.example.app.exceptions.InvalidEmailException;
 import com.example.app.exceptions.UserExistsException;
 import org.springframework.http.HttpStatus;
@@ -33,6 +34,19 @@ public class GlobalExceptionHandler {
                 Instant.now(),
                 status.value(),
                 "InvalidEmailException",
+                e.getMessage(),
+                request.getRequestURI()
+        );
+        return ResponseEntity.status(status).body(err);
+    }
+
+    @ExceptionHandler(InvalidConfirmationTokenException.class)
+    public ResponseEntity<StandardError> invalidConfirmationToken(InvalidConfirmationTokenException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        StandardError err = new StandardError(
+                Instant.now(),
+                status.value(),
+                "InvalidConfirmationTokenException",
                 e.getMessage(),
                 request.getRequestURI()
         );

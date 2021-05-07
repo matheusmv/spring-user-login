@@ -1,14 +1,13 @@
 package com.example.app.controllers.responses;
 
-import com.example.app.entities.User;
 import lombok.Data;
 
 @Data
 public class RegistrationResponse {
 
-    private String id;
+    private String token;
 
-    public RegistrationResponse(User user) {
-        this.id = user.getId();
+    public RegistrationResponse(String token) {
+        this.token = token;
     }
 }

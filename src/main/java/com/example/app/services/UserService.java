@@ -1,5 +1,6 @@
 package com.example.app.services;
 
+import com.example.app.entities.ConfirmationToken;
 import com.example.app.entities.User;
 import com.example.app.exceptions.UserExistsException;
 import com.example.app.repositories.UserRepository;
@@ -10,7 +11,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -21,6 +23,7 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final ConfirmationTokenService confirmationTokenService;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -38,12 +41,29 @@ public class UserService implements UserDetailsService {
         String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
 
         user.setPassword(encodedPassword);
-        user.setCreatedAt(Instant.now());
+        user.setCreatedAt(LocalDateTime.now());
 
         userRepository.save(user);
 
-        // TODO: send confirmation token
+        String token = UUID.randomUUID().toString();
 
-        return "it works";
+        ConfirmationToken confirmationToken = new ConfirmationToken(
+                token,
+                LocalDateTime.now(),
+                LocalDateTime.now().plusMinutes(15),
+                user
+        );
+
+        confirmationTokenService.saveConfirmationToken(confirmationToken);
+
+        // TODO: send email
+
+        return token;
+    }
+
+    public void enableUser(String email) {
+        var user = userRepository.findByEmail(email);
+        user.ifPresent(u -> u.setEnabled(true));
+        user.ifPresent(userRepository::save);
     }
 }
