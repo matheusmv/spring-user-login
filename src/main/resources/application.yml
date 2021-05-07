@@ -1,0 +1,10 @@
+server:
+  error:
+    include-message: always
+    include-binding-errors: always
+
+spring:
+  data:
+    mongodb:
+      auto-index-creation: true
+      uri: mongodb+srv://
