@@ -18,17 +18,17 @@ import javax.mail.internet.MimeMessage;
 public class EmailService implements EmailSender {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(EmailService.class);
-    private final static String EMAIL_FROM = "no-reply@spring-user-login.com";
+    private final static String EMAIL_FROM = "no-reply@user-login.com";
 
     private final JavaMailSender javaMailSender;
 
     @Override
     @Async
-    public void send(String to, String email) {
+    public void send(String to, String emailBody) {
         try {
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
-            helper.setText(email, true);
+            helper.setText(emailBody, true);
             helper.setTo(to);
             helper.setSubject("Confirm your email");
             helper.setFrom(EMAIL_FROM);

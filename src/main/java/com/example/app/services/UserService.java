@@ -3,6 +3,7 @@ package com.example.app.services;
 import com.example.app.entities.ConfirmationToken;
 import com.example.app.entities.User;
 import com.example.app.exceptions.UserExistsException;
+import com.example.app.exceptions.UserNotFoundException;
 import com.example.app.repositories.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -48,21 +49,27 @@ public class UserService implements UserDetailsService {
 
         String token = UUID.randomUUID().toString();
 
-        ConfirmationToken confirmationToken = new ConfirmationToken(
-                token,
-                LocalDateTime.now(),
-                LocalDateTime.now().plusMinutes(15),
-                user
-        );
-
-        confirmationTokenService.saveConfirmationToken(confirmationToken);
+        saveConfirmationToken(user, token);
 
         return token;
     }
 
+    public void saveConfirmationToken(User user, String token) {
+        ConfirmationToken confirmationToken = new ConfirmationToken(
+                token,
+                LocalDateTime.now(),
+                LocalDateTime.now().plusMinutes(15),
+                user.getEmail()
+        );
+
+        confirmationTokenService.saveConfirmationToken(confirmationToken);
+    }
+
     public void enableUser(String email) {
-        var user = userRepository.findByEmail(email);
-        user.ifPresent(usr -> usr.setEnabled(true));
-        user.ifPresent(userRepository::save);
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_MSG));
+
+        user.setEnabled(true);
+        userRepository.save(user);
     }
 }

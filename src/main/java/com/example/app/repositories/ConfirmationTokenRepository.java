@@ -11,4 +11,7 @@ import java.util.Optional;
 public interface ConfirmationTokenRepository extends MongoRepository<ConfirmationToken, String> {
     @Query(value = "{token: ?0}")
     Optional<ConfirmationToken> findByToken(String token);
+
+    @Query(value = "{email: ?0}")
+    Optional<ConfirmationToken> findTokenByUserEmail(String email);
 }

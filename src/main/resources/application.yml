@@ -8,6 +8,7 @@ spring:
     mongodb:
       auto-index-creation: true
       uri: mongodb+srv://
+
   mail:
     host: smtp.gmail.com
     port: 587

@@ -25,7 +25,6 @@ public class ConfirmationTokenService {
     public void setConfirmedAt(String token) {
         var confirmationToken = getToken(token);
         confirmationToken.ifPresent(tkn -> tkn.setConfirmedAt(LocalDateTime.now()));
-        confirmationToken.ifPresent(tkn -> tkn.getUser().setEnabled(true));
         confirmationToken.ifPresent(confirmationTokenRepository::save);
     }
 }

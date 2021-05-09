@@ -15,23 +15,20 @@ import java.time.LocalDateTime;
 public class ConfirmationToken {
 
     private String id;
-    @NonNull
     private String token;
-    @NonNull
     private LocalDateTime createdAt;
-    @NonNull
     private LocalDateTime expiresAt;
     private LocalDateTime confirmedAt;
 
-    private User user;
+    private String userEmail;
 
     public ConfirmationToken(String token,
                              LocalDateTime createdAt,
                              LocalDateTime expiresAt,
-                             User user) {
+                             String userEmail) {
         this.token = token;
         this.createdAt = createdAt;
         this.expiresAt = expiresAt;
-        this.user = user;
+        this.userEmail = userEmail;
     }
 }
